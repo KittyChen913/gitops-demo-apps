@@ -1,0 +1,26 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: dev
+
+resources:
+  - ../../base
+
+images:
+  - name: gitops-demo-backend
+    newTag: dev
+
+replicas:
+  - name: backend
+    count: 1
+
+patches:
+  - patch: |-
+      - op: add
+        path: /spec/template/spec/containers/0/env/-
+        value:
+          name: ENV
+          value: dev
+    target:
+      kind: Deployment
+      name: backend
