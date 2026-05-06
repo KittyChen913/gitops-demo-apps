@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: backend-dev
+  namespace: argocd
+  labels:
+    app: backend
+    env: dev
+spec:
+  project: default
+
+  source:
+    repoURL: https://github.com/your-org/gitops-demo-apps.git
+    targetRevision: master
+    path: apps/backend/overlays/dev
+
+  destination:
+    server: https://dev-cluster.example.com
+    namespace: dev
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
