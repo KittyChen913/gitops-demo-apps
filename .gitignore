@@ -1,0 +1,21 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Kustomize 本地輸出
+output/
+rendered/
+
+# 本地覆蓋（不應提交至 repo）
+**/overlays/local/
+
+# Secret 相關（應使用 Sealed Secrets 或 External Secrets）
+*secret*.yaml
+*secrets*.yaml
+!**/base/*secret*example*.yaml
