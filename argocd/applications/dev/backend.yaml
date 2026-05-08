@@ -10,7 +10,7 @@ spec:
   project: default
 
   source:
-    repoURL: https://github.com/your-org/gitops-demo-apps.git
+    repoURL: https://github.com/KittyChen913/gitops-demo-apps.git
     targetRevision: master
     path: apps/backend/overlays/dev
 
