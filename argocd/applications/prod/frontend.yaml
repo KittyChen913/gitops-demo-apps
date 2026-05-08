@@ -15,7 +15,7 @@ spec:
     path: apps/frontend/overlays/prod
 
   destination:
-    server: https://prod-cluster.example.com
+    server: https://kubernetes.default.svc
     namespace: prod
 
   syncPolicy:
