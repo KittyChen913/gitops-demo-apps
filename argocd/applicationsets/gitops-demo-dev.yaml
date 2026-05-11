@@ -1,0 +1,36 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: gitops-demo-dev
+  namespace: argocd
+spec:
+  generators:
+    - list:
+        elements:
+          - app: backend
+          - app: frontend
+  template:
+    metadata:
+      name: "{{app}}-dev"
+      labels:
+        app: "{{app}}"
+        env: dev
+    spec:
+      project: default
+
+      source:
+        repoURL: https://github.com/KittyChen913/gitops-demo-apps.git
+        targetRevision: master
+        path: "apps/{{app}}/overlays/dev"
+
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: dev
+
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+          - ServerSideApply=true
