@@ -32,11 +32,10 @@ spec:
             httpGet:
               path: /health
               port: 8081
-            initialDelaySeconds: 5
             periodSeconds: 10
           livenessProbe:
             httpGet:
               path: /health
               port: 8081
-            initialDelaySeconds: 15
             periodSeconds: 20
+            failureThreshold: 3
