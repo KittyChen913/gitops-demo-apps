@@ -9,7 +9,7 @@ spec:
     app: backend
   ports:
     - name: http
-      port: 80
-      targetPort: 8081
+      port: 8081        # Service virtual port
+      targetPort: 8080  # container port
       protocol: TCP
   type: ClusterIP

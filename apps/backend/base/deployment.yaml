@@ -18,24 +18,24 @@ spec:
         - name: backend
           image: gitops-demo-backend:latest
           ports:
-            - containerPort: 8081
+            - containerPort: 8080
           env:
             - name: PORT
-              value: "8081"
+              value: "8080"
           startupProbe:
             httpGet:
               path: /health
-              port: 8081
+              port: 8080
             failureThreshold: 6
             periodSeconds: 5
           readinessProbe:
             httpGet:
               path: /health
-              port: 8081
+              port: 8080
             periodSeconds: 10
           livenessProbe:
             httpGet:
               path: /health
-              port: 8081
+              port: 8080
             periodSeconds: 20
             failureThreshold: 3
