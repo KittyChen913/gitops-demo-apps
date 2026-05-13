@@ -24,6 +24,12 @@ spec:
               value: "http://backend"
             - name: PORT
               value: "8080"
+          startupProbe:
+            httpGet:
+              path: /
+              port: 8080
+            failureThreshold: 30
+            periodSeconds: 2
           readinessProbe:
             httpGet:
               path: /
