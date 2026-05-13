@@ -8,6 +8,7 @@ resources:
 
 images:
   - name: gitops-demo-frontend
+    newName: superkittychen/gitops-demo-frontend
     newTag: dev
 
 replicas:
