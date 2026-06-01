@@ -5,10 +5,13 @@ metadata:
   namespace: argocd
 spec:
   generators:
-    - list:
-        elements:
-          - app: backend
-          - app: frontend
+    - matrix:
+        generators:
+          - list:
+              elements:
+                - app: backend
+                - app: frontend
+          - clusters: {}
   template:
     metadata:
       name: "{{app}}-prod"
@@ -24,7 +27,7 @@ spec:
         path: "apps/{{app}}/overlays/prod"
 
       destination:
-        server: https://kubernetes.default.svc
+        server: '{{server}}'
         namespace: prod
 
       syncPolicy:
