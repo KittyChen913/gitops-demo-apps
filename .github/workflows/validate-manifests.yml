@@ -1,0 +1,67 @@
+name: Validate manifests
+
+# 本 workflow 只驗證 Git 中的 manifest，不連線或部署至任何叢集。
+on:
+  pull_request:
+    paths:
+      - "apps/**"
+      - "argocd/**"
+      - ".github/actions/setup-k8s-tools/**"
+      - ".github/workflows/validate-manifests.yml"
+      - ".github/yamllint.yaml"
+  push:
+    branches:
+      - master
+    paths:
+      - "apps/**"
+      - "argocd/**"
+      - ".github/actions/setup-k8s-tools/**"
+      - ".github/workflows/validate-manifests.yml"
+      - ".github/yamllint.yaml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: validate-manifests-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Lint and render
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: ./.github/actions/setup-k8s-tools
+
+      - name: Lint YAML
+        run: yamllint -c .github/yamllint.yaml apps argocd
+
+      - name: Render and validate overlays
+        shell: bash
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+
+          overlays=(apps/*/overlays/dev apps/*/overlays/prod)
+          if [[ ${#overlays[@]} -eq 0 ]]; then
+            echo "::error::No Kustomize overlays found."
+            exit 1
+          fi
+
+          mkdir -p output
+          for overlay in "${overlays[@]}"; do
+            app="$(basename "$(dirname "$(dirname "$overlay")")")"
+            environment="$(basename "$overlay")"
+            rendered="output/${app}-${environment}.yaml"
+
+            echo "Validating ${overlay}"
+            kustomize build "$overlay" > "$rendered"
+            kubeconform \
+              -strict \
+              -summary \
+              -kubernetes-version "${KUBECONFORM_K8S_VERSION}" \
+              "$rendered"
+          done

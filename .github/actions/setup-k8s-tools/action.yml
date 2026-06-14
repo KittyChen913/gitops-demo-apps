@@ -1,0 +1,53 @@
+name: Setup manifest validation tools
+description: Install kustomize, kubeconform, and yamllint
+inputs:
+  kustomize_version:
+    description: Kustomize release version
+    required: false
+    default: "5.6.0"
+  kubeconform_version:
+    description: Kubeconform release version
+    required: false
+    default: "0.6.7"
+  kubernetes_version:
+    description: Kubernetes API version for kubeconform schema validation
+    required: false
+    default: "1.30.0"
+
+runs:
+  using: composite
+  steps:
+    - name: Install kustomize
+      shell: bash
+      env:
+        KUSTOMIZE_VERSION: ${{ inputs.kustomize_version }}
+      run: |
+        set -euo pipefail
+        ver="${KUSTOMIZE_VERSION}"
+        curl -fsSL "https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv${ver}/kustomize_v${ver}_linux_amd64.tar.gz" \
+          | tar xz -C /tmp
+        sudo mv /tmp/kustomize /usr/local/bin/kustomize
+        kustomize version
+
+    - name: Install kubeconform
+      shell: bash
+      env:
+        KUBECONFORM_VERSION: ${{ inputs.kubeconform_version }}
+      run: |
+        set -euo pipefail
+        ver="${KUBECONFORM_VERSION}"
+        curl -fsSL "https://github.com/yannh/kubeconform/releases/download/v${ver}/kubeconform-linux-amd64.tar.gz" \
+          | tar xz -C /tmp
+        sudo mv /tmp/kubeconform /usr/local/bin/kubeconform
+        kubeconform -v
+
+    - name: Install yamllint
+      shell: bash
+      run: pip install --quiet yamllint
+
+    - name: Export tool versions to GITHUB_ENV
+      shell: bash
+      env:
+        KUBERNETES_VERSION: ${{ inputs.kubernetes_version }}
+      run: |
+        echo "KUBECONFORM_K8S_VERSION=${KUBERNETES_VERSION}" >> "$GITHUB_ENV"

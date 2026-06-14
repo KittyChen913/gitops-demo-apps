@@ -1,0 +1,18 @@
+---
+extends: default
+
+rules:
+  line-length:
+    max: 140
+    level: warning
+  new-lines: disable
+  document-start: disable
+  truthy:
+    allowed-values: ["true", "false", "on"]
+  comments:
+    min-spaces-from-content: 1
+
+ignore: |
+  output/
+  rendered/
+  .github/workflows/
