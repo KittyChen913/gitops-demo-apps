@@ -5,5 +5,7 @@ resources:
   - deployment.yaml
   - service.yaml
 
-commonLabels:
-  app: backend
+labels:
+  - pairs:
+      app: backend
+    includeSelectors: true
