@@ -1,8 +1,8 @@
-# OS
+# 作業系統
 .DS_Store
 Thumbs.db
 
-# Editor
+# 編輯器
 .vscode/
 .idea/
 *.swp

@@ -1,6 +1,6 @@
 name: Validate manifests
 
-# 本 workflow 只驗證 Git 中的 manifest，不連線或部署至任何叢集。
+# 本 workflow 只驗證 Git 中的 manifest，不連線或部署至任何 Cluster。
 on:
   pull_request:
     paths:
