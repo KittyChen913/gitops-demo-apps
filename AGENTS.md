@@ -6,10 +6,10 @@
 
 本 repo 是 Kubernetes application manifests 的 GitOps source of truth：
 
-- 管理 frontend / backend workload manifests、Kustomize overlays 與 Argo CD ApplicationSet。
+- 管理 frontend / backend workload manifests、Kustomize overlays 與 ArgoCD ApplicationSet。
 - frontend / backend 原始碼、Dockerfile 與映像建置 workflow 分別由 `gitops-demo-frontend`、`gitops-demo-backend` 管理。
 - Kubernetes 叢集由 `gitops-demo-cluster` 管理。
-- Argo CD 安裝、bootstrap 與 cluster registration 由 `gitops-demo-infra` 管理。
+- ArgoCD 安裝、bootstrap 與 cluster registration 由 `gitops-demo-infra` 管理。
 - 本 repo 不包含 Terraform，不使用 kubeconfig，也不直接部署至叢集。
 - source repo 的 workflow 只建置並推送映像，不會回寫本 repo；映像 tag 變更仍需在 overlay 明確提交。
 - GitHub repository 名稱為 `gitops-demo-apps`。
@@ -24,7 +24,7 @@
 - `.github/workflows/validate-manifests.yml`：唯一的 CI workflow。
 - `.github/actions/setup-k8s-tools/`：CI 驗證工具安裝。
 - `.github/yamllint.yaml`：YAML lint 規則。
-- `docs/ci-cd.md`：CI trigger、驗證內容、本機執行方式與 Argo CD 同步邊界。
+- `docs/ci-cd.md`：CI trigger、驗證內容與 ArgoCD 同步邊界。
 
 ## 註解與術語規範
 
@@ -33,6 +33,7 @@
 - `Management Cluster`、`Worker Cluster`、`Cluster` 與 `S3 State Bucket` 均視為專有名詞，不得翻譯成中文，也不得使用其他大小寫變體。
 - 複數形式必須寫成 `Management Clusters`、`Worker Clusters` 與 `S3 State Buckets`。
 - README、docs、Terraform description、workflow 顯示文字、summary 與人工維護的執行訊息也必須遵守相同的專有名詞大小寫。
+- 產品名稱的唯一允許拼法為 `ArgoCD`。
 - 自動生成檔案（例如 `.terraform.lock.hcl`）的生成器註解、shebang、lint directive 與被註解掉的程式碼不需翻譯或改寫。
 
 ## Manifest 規範
@@ -53,7 +54,7 @@
 - README 的路徑與環境表格
 - CI 是否仍能自動找到所有 overlays
 
-## Argo CD 規範
+## ArgoCD 規範
 
 - `repoURL` 必須指向本 repository，並與 `gitops-demo-infra` 的根 Application 一致；正確 URL 為 `https://github.com/KittyChen913/gitops-demo-apps.git`。
 - `targetRevision` 必須與預設分支 `master` 一致。
@@ -61,7 +62,7 @@
 - prod ApplicationSet 只能指向 prod overlays 與 `prod` namespace。
 - dev 目前啟用 automated sync、prune 與 self-heal。
 - prod ApplicationSet 產生的 Applications 目前未啟用 automated sync，Git 變更不代表 workload 已同步至叢集。
-- 不得在本 repo 的 CI 加入 `kubectl apply`、Helm deploy、Argo CD API 或 sync 命令。
+- 不得在本 repo 的 CI 加入 `kubectl apply`、Helm deploy、ArgoCD API 或 sync 命令。
 
 ## CI 規範
 
@@ -106,6 +107,6 @@ actionlint
 
 - 文件使用繁體中文，技術名稱、命令、路徑與識別字保留英文。
 - 修改 manifest 結構或 ApplicationSet 時，需更新 README。
-- 修改 CI trigger、驗證工具、驗證命令或 Argo CD 同步邊界時，需更新 `docs/ci-cd.md`。
+- 修改 CI trigger、驗證工具、驗證命令或 ArgoCD 同步邊界時，需更新 `docs/ci-cd.md`。
 - 回覆使用者時說明修改檔案、驗證結果與未執行項目。
 - 不要回復使用者既有未提交變更。
