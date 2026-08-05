@@ -65,11 +65,12 @@
 
 ## CI 規範
 
-CI 保持最小化，只執行：
+正式 CI 作為 PR／merge gate，保持最小化並執行：
 
-1. `yamllint` 檢查 `apps/` 與 `argocd/`。
-2. `kustomize build` render 所有 dev/prod overlays。
-3. `kubeconform` 驗證 render 後的 Kubernetes resources。
+1. `actionlint` 檢查 GitHub Actions workflow 與 composite action。
+2. `yamllint` 檢查 `apps/` 與 `argocd/`。
+3. `kustomize build` render 所有 dev/prod overlays。
+4. `kubeconform` 驗證 render 後的 Kubernetes resources。
 
 不要新增以下流程，除非使用者明確改變專案需求：
 

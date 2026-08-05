@@ -6,8 +6,8 @@ on:
     paths:
       - "apps/**"
       - "argocd/**"
-      - ".github/actions/setup-k8s-tools/**"
-      - ".github/workflows/validate-manifests.yml"
+      - ".github/actions/**"
+      - ".github/workflows/**"
       - ".github/yamllint.yaml"
   push:
     branches:
@@ -15,8 +15,8 @@ on:
     paths:
       - "apps/**"
       - "argocd/**"
-      - ".github/actions/setup-k8s-tools/**"
-      - ".github/workflows/validate-manifests.yml"
+      - ".github/actions/**"
+      - ".github/workflows/**"
       - ".github/yamllint.yaml"
   workflow_dispatch:
 
@@ -28,6 +28,17 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  actionlint:
+    name: Lint GitHub Actions
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Run actionlint
+        uses: docker://rhysd/actionlint:1.7.12
+        with:
+          args: -color
+
   validate:
     name: Lint and render
     runs-on: ubuntu-latest
