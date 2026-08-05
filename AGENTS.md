@@ -32,7 +32,9 @@
 - 專有名詞、產品名稱、API、Kubernetes 資源種類、欄位名稱、命令、路徑與識別字可保留英文，但英文專有名詞必須放在中文敘述中，不得以完整英文句子撰寫註解。
 - `Management Cluster`、`Worker Cluster`、`Cluster` 與 `S3 State Bucket` 均視為專有名詞，不得翻譯成中文，也不得使用其他大小寫變體。
 - 複數形式必須寫成 `Management Clusters`、`Worker Clusters` 與 `S3 State Buckets`。
-- README、docs、Terraform description、workflow 顯示文字、summary 與人工維護的執行訊息也必須遵守相同的專有名詞大小寫。
+- README 與 docs 使用繁體中文敘述，並遵守相同的專有名詞大小寫。
+- Workflow／job／step、composite action 的 `name` 與 `description` 必須使用英文。
+- 程式碼內的文字必須使用英文，包括 CLI／UI 文字、log、error、warning、summary 與其他執行訊息；但等待／重試迴圈中即時印給人類觀察進度的狀態訊息（例如第幾次嘗試、剩餘秒數、失敗原因、逾時後的診斷輸出）例外，使用繁體中文。
 - 產品名稱的唯一允許拼法為 `ArgoCD`。
 - 自動生成檔案（例如 `.terraform.lock.hcl`）的生成器註解、shebang、lint directive 與被註解掉的程式碼不需翻譯或改寫。
 
@@ -86,22 +88,13 @@
 
 Workflow shell 中應使用 `set -euo pipefail`、引用變數，並將 GitHub expression 先放入 `env:` 再用於 shell 邏輯。
 
-## 建議驗證
+## 變更驗證
 
-```bash
-yamllint -c .github/yamllint.yaml apps argocd
-
-for overlay in apps/*/overlays/dev apps/*/overlays/prod; do
-  kustomize build "$overlay" | kubeconform \
-    -strict \
-    -summary \
-    -kubernetes-version 1.30.0
-done
-
-actionlint
-```
-
-若本機缺少工具，需明確說明未執行的驗證，不要宣稱完整通過。
+- 本機 validation 必須依全域「最小必要 Validation」規範，先判定本次變更影響的 manifest、overlay、ApplicationSet 或 CI contract，再從 `yamllint`、`kustomize build`、`kubeconform` 與 `actionlint` 中選擇能直接驗證風險的最小子集。
+- 只影響單一 application 或 environment 時，優先驗證直接受影響的 paths 與 render targets；不得預設 render 所有 overlays。
+- 修改 base、ApplicationSet、overlay discovery、共用 CI action 或其他 shared boundary 時，才將範圍擴及其直接 dev／prod consumers，並在執行前說明局部驗證不足的原因。
+- 上述完整 CI 流程屬於 PR／merge gate，不是每次局部修改後的預設本機 validation。
+- 若本機缺少工具，需將對應 validation 標示為 `BLOCKED` 或 `NOT RUN`，並說明未取得的信心，不得宣稱完整通過。
 
 ## 文件與回覆
 
