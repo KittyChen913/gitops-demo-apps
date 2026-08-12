@@ -9,7 +9,7 @@
 - 管理 frontend / backend workload manifests、Kustomize overlays 與 ArgoCD ApplicationSet。
 - frontend / backend 原始碼、Dockerfile 與映像建置 workflow 分別由 `gitops-demo-frontend`、`gitops-demo-backend` 管理。
 - Kubernetes 叢集由 `gitops-demo-cluster` 管理。
-- ArgoCD 安裝、bootstrap 與 cluster registration 由 `gitops-demo-infra` 管理。
+- ArgoCD 安裝、bootstrap 與 cluster registration 由 `gitops-demo-argocd` 管理。
 - 本 repo 不包含 Terraform，不使用 kubeconfig，也不直接部署至叢集。
 - source repo 的 workflow 只建置並推送映像，不會回寫本 repo；映像 tag 變更仍需在 overlay 明確提交。
 - GitHub repository 名稱為 `gitops-demo-apps`。
@@ -58,7 +58,7 @@
 
 ## ArgoCD 規範
 
-- `repoURL` 必須指向本 repository，並與 `gitops-demo-infra` 的根 Application 一致；正確 URL 為 `https://github.com/KittyChen913/gitops-demo-apps.git`。
+- `repoURL` 必須指向本 repository，並與 `gitops-demo-argocd` 的根 Application 一致；正確 URL 為 `https://github.com/KittyChen913/gitops-demo-apps.git`。
 - `targetRevision` 必須與預設分支 `master` 一致。
 - dev ApplicationSet 只能指向 dev overlays 與 `dev` namespace。
 - prod ApplicationSet 只能指向 prod overlays 與 `prod` namespace。
