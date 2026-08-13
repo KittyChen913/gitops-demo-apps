@@ -1,4 +1,4 @@
-name: Validate manifests
+name: Validation
 
 # 本 workflow 只驗證 Git 中的 manifest，不連線或部署至任何 Cluster。
 on:
@@ -40,7 +40,7 @@ jobs:
           args: -color
 
   validate:
-    name: Lint and render
+    name: Validate
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
