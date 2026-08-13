@@ -20,8 +20,8 @@ spec:
           ports:
             - containerPort: 80
           env:
-            - name: API_BASE_URL
-              value: "http://backend"
+            - name: BACKEND_URL
+              value: "backend:8081"
             - name: PORT
               value: "80"
           startupProbe:

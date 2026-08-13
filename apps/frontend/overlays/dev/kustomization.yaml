@@ -5,6 +5,7 @@ namespace: dev
 
 resources:
   - ../../base
+  - frontend-public-service.yaml
 
 images:
   - name: gitops-demo-frontend
@@ -22,6 +23,9 @@ patches:
         value:
           name: ENV
           value: dev
+      - op: add
+        path: /spec/template/spec/containers/0/imagePullPolicy
+        value: Always
     target:
       kind: Deployment
       name: frontend

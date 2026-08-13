@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-public
+  labels:
+    app: frontend
+  annotations:
+    service.beta.kubernetes.io/linode-loadbalancer-default-protocol: tcp
+    service.beta.kubernetes.io/linode-loadbalancer-check-type: http
+    service.beta.kubernetes.io/linode-loadbalancer-check-path: "/"
+spec:
+  type: LoadBalancer
+  externalTrafficPolicy: Cluster
+  selector:
+    app: frontend
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+      protocol: TCP
