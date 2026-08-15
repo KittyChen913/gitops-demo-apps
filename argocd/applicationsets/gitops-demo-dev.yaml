@@ -4,6 +4,26 @@ metadata:
   name: gitops-demo-dev
   namespace: argocd
 spec:
+  # Progressive Syncs：Dev 的發布順序固定為 backend -> frontend。
+  # 需要 ArgoCD ApplicationSet controller 已啟用 progressive syncs
+  # （由 gitops-demo-argocd 的 argocd/install 提供），否則本 strategy 不會生效。
+  strategy:
+    type: RollingSync
+    rollingSync:
+      steps:
+        # Step 1：backend 必須先進入 Synced/Healthy
+        - matchExpressions:
+            - key: app
+              operator: In
+              values:
+                - backend
+        # Step 2：確認 backend 健康後才同步 frontend
+        - matchExpressions:
+            - key: app
+              operator: In
+              values:
+                - frontend
+
   generators:
     - matrix:
         generators:

@@ -62,7 +62,7 @@
 - `targetRevision` 必須與預設分支 `master` 一致。
 - dev ApplicationSet 只能指向 dev overlays 與 `dev` namespace。
 - prod ApplicationSet 只能指向 prod overlays 與 `prod` namespace。
-- dev 目前啟用 automated sync、prune 與 self-heal。
+- dev ApplicationSet template 保留 `automated.prune` 與 `automated.selfHeal`；RollingSync 生效後，generated Applications 的 auto-sync 由 ApplicationSet controller 強制關閉並接手分步同步。`selfHeal` 的實際接手行為尚待 runtime 驗收，不得描述成已驗證。
 - prod ApplicationSet 產生的 Applications 目前未啟用 automated sync，Git 變更不代表 workload 已同步至叢集。
 - 不得在本 repo 的 CI 加入 `kubectl apply`、Helm deploy、ArgoCD API 或 sync 命令。
 
