@@ -5,7 +5,7 @@ metadata:
   labels:
     app: frontend
   annotations:
-    service.beta.kubernetes.io/linode-loadbalancer-default-protocol: tcp
+    service.beta.kubernetes.io/linode-loadbalancer-default-protocol: http
     service.beta.kubernetes.io/linode-loadbalancer-check-type: http
     service.beta.kubernetes.io/linode-loadbalancer-check-path: "/"
 spec:
